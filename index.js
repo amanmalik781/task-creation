@@ -41,7 +41,7 @@ app.post('/tasks', async (req, res) => {
     }
 });
 
-// Start the Express server
+// Start the Express server on specified port
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Task Creation Microservice is running on port ${port}`);
