@@ -46,3 +46,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Task Creation Microservice is running on port ${port}`);
 });
+
+// alias docker="/Applications/Docker.app/Contents/Resources/bin/docker"
