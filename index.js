@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const axios = require('axios');
 
 // Initialize Express app
 const app = express();
@@ -25,6 +26,16 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model('Task', taskSchema);
 
+// Retrieve task list by communicating to another microservice
+
+const getTaskList = () => {
+    axios.get('http://localhost:3001/tasks')
+        .then(
+            (response) => console.log(response.data),
+            (error) => console.log(error)
+        );
+}
+
 // Create a new task
 app.post('/tasks', async (req, res) => {
     try {
@@ -33,8 +44,11 @@ app.post('/tasks', async (req, res) => {
             description: req.body.description,
             completed: req.body.completed || false,
         });
-        const user = await newTask.save().then((task) => task.toObject());
-        return res.status(200).json(user).end();
+        const task = await newTask.save().then((item) => item.toObject());
+        if (task) {
+            getTaskList();
+        }
+        return res.status(200).json(task).end();
     } catch (error) {
         console.log('task creation error', error);
         return res.sendStatus(400);
